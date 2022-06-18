@@ -92,7 +92,7 @@ public class PorudzbinaRestController
         Hashtable<String, String> greska = new Hashtable<>();
 
         if (novaPorudzbinaDto.getIdRestorana() == 0)
-            greska.put("IdRestorana", "ID ne sme biti 0...");
+            greska.put("IdRestorana", "ID mora biti razlicit od 0!");
 
         if (novaPorudzbinaDto.getNovePorudzbine() == null || novaPorudzbinaDto.getNovePorudzbine().size() == 0)
             greska.put("NovePorudzbine", "Korpa ne sme biti prazna!");
