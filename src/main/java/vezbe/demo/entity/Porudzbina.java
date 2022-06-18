@@ -24,7 +24,7 @@ public class Porudzbina implements Serializable
     @GenericGenerator(name = "UUID", strategy =
             "org.hibernate.id.UUIDGenerator")
     @Type(type = "org.hibernate.type.UUIDCharType")
-    private UUID id;
+    private UUID uuid;
 
 
     @OneToMany(mappedBy = "porudzbina", cascade = CascadeType.ALL)
@@ -84,7 +84,7 @@ public class Porudzbina implements Serializable
     }
 
     public Porudzbina(UUID UUID, Restoran restoran_poruceno, Date vreme_porudzbine, String username, Status status) {
-        this.id = UUID;
+        this.uuid = UUID;
         this.restoran_poruceno = restoran_poruceno;
         this.vreme_porudzbine = vreme_porudzbine;
         this.username = username;
@@ -121,12 +121,12 @@ public class Porudzbina implements Serializable
         this.korisnik = korisnik;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setUuid(UUID id) {
+        this.uuid = id;
     }
 
     public Set<PorudzbineArtikli> getOrderedItems() {

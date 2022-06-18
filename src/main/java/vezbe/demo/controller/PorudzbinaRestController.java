@@ -64,7 +64,7 @@ public class PorudzbinaRestController
         List<PorudzbinaDto> porudzbinaDtoList = new ArrayList<>();
 
         for (Porudzbina p : kupac.getPorudzbine()) {
-            PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getId(), p.getVreme_porudzbine());
+            PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getUuid(), p.getVreme_porudzbine());
 
             List<PorudzbinaKupcaDto> porudzbinaKupcaDtoList = new ArrayList<>();
 
@@ -349,7 +349,7 @@ public class PorudzbinaRestController
 
         for (Porudzbina p : dostavljac.getPorudzbine()) {
             if (p.getStatus() == Status.ceka_dostavljaca) {
-                PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getId(), p.getVreme_porudzbine());
+                PorudzbinaDto porudzbinaDto = new PorudzbinaDto(p.getUuid(), p.getVreme_porudzbine());
 
                 List<PorudzbinaKupcaDto> porudzbinaKupcaDtoList = new ArrayList<>();
 
