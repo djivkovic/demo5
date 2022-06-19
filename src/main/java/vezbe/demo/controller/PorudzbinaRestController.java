@@ -1,5 +1,6 @@
 package vezbe.demo.controller;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -190,15 +191,17 @@ public class PorudzbinaRestController
         PorudzbineArtikli pa = null;
 
         for (PorudzbineArtikli porudzbineArtikli : porudzbineArtikliRepository.findAll())
-            if (Objects.equals(porudzbineArtikli.getId(), id))
+            if(porudzbineArtikli.getId() == id)
                 pa = porudzbineArtikli;
 
         if (pa == null || kupac == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
         Porudzbina narudzbina = pa.getPorudzbina();
+        narudzbina.setKupac((Kupac) loggedKorisnik);
         narudzbina.setStatus(Status.obrada);
         porudzbinaRepository.saveAndFlush(narudzbina);
+
 
         return ResponseEntity.status(HttpStatus.OK).body("Vasa porudzbina je prihvacena!");
 
@@ -304,13 +307,14 @@ public class PorudzbinaRestController
         PorudzbineArtikli porudzbina = null;
 
         for (PorudzbineArtikli pa : porudzbineArtikliRepository.findAll())
-            if (Objects.equals(id, pa.getId()))
+            if (id == pa.getId())
                 porudzbina = pa;
 
         Porudzbina p = porudzbina.getPorudzbina();
 
         if (porudzbina == null)
             return new ResponseEntity(HttpStatus.FORBIDDEN);
+
 
         if (p.getStatus() == Status.u_transportu) {
             p.setStatus(Status.dostavljena);
@@ -319,6 +323,8 @@ public class PorudzbinaRestController
         }
 
         Kupac kupac = p.getKupac();
+        if(kupac == null)
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
         kupac.setBodovi((int) (porudzbina.getUkupnaCena() / 1000 * 133));
 
         kupacRepository.saveAndFlush(kupac);

@@ -109,7 +109,7 @@ public class DatabaseConfiguration {
 
 
 
-        Dostavljac dostavljac = new Dostavljac("makro123", "marko123", "Marko", "Markovic");
+        Dostavljac dostavljac = new Dostavljac("marko123", "marko123", "Marko", "Markovic");
         dostavljac.setPorudzbine(Set.of(porudzbina));
         dostavljacRepository.save(dostavljac);
 
