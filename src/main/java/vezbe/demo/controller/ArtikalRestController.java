@@ -44,8 +44,9 @@ public class ArtikalRestController {
 
         Menadzer menadzer = menadzerRepository.getByUsername(username);
         menadzer.getRestoran().getArtikli().add(artikal);
+        artikal.setRestaurant(menadzer.getRestoran());
         artikalRepository.save(artikal);
-        return ResponseEntity.ok(artikal);
+        return new ResponseEntity(artikal, HttpStatus.OK);
     }
 
     private HashMap<String, String> validate(Artikal artikal) {
