@@ -3,19 +3,17 @@ package vezbe.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import vezbe.demo.entity.Artikal;
-import vezbe.demo.entity.Menadzer;
-import vezbe.demo.entity.Uloga;
+import org.springframework.web.bind.annotation.*;
+import vezbe.demo.entity.*;
 import vezbe.demo.repository.ArtikalRepository;
+import vezbe.demo.repository.KorisnikRepository;
 import vezbe.demo.repository.MenadzerRepository;
+import vezbe.demo.service.RestoranService;
 import vezbe.demo.service.SessionService;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.UUID;
 
 @RestController
 public class ArtikalRestController {
@@ -28,6 +26,12 @@ public class ArtikalRestController {
 
     @Autowired
     SessionService sessionService;
+
+    @Autowired
+    KorisnikRepository korisnikRepository;
+
+    @Autowired
+    RestoranService restoranService;
 
     @PostMapping("/api/artikli/kreiraj-artikal")
     public ResponseEntity<Artikal> kreirajArtikal(@RequestParam String username, @RequestBody Artikal artikal, HttpSession session) {
@@ -62,4 +66,29 @@ public class ArtikalRestController {
 
         return greska;
     }
+
+    @DeleteMapping("/api/artikal/obrisi/{id}")
+    public ResponseEntity obrisiArtikal(@PathVariable UUID id, HttpSession session) {
+        if (!sessionService.validateSession(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if (!sessionService.getRole(session).equals(Uloga.MENADZER))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik korisnik = korisnikRepository.getByUsername((String) session.getAttribute("username"));
+        Restoran restoran = ((Menadzer) korisnik).getRestoran();
+        Artikal artikal;
+        try {
+            artikal = artikalRepository.findById(id).get();
+        } catch(Exception e ) {
+            return new ResponseEntity("Neispravan id", HttpStatus.BAD_REQUEST);
+        }
+        if(restoran.getArtikli().contains(artikal)) {
+            restoran.getArtikli().remove(artikal);
+            restoranService.save(restoran);
+            return new ResponseEntity("Uspesno obrisan artikal", HttpStatus.OK);
+        }
+        return new ResponseEntity("Neuspesno pronalazenje artikla!", HttpStatus.FORBIDDEN);
+    }
+
 }

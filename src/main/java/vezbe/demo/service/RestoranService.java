@@ -23,4 +23,8 @@ public class RestoranService {
     private void pogresanNaziv(String naziv) throws Exception {
         throw new Exception("Restoran sa imenom '" + naziv + "' vec postoji!");
     }
+
+    public Restoran save(Restoran restoran){
+        return restoranRepository.save(restoran);
+    }
 }
