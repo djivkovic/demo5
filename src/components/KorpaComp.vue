@@ -1,0 +1,620 @@
+<template>
+    <header>
+        <div class="wrapper">
+            <ul class="header-content">
+                <li>
+
+                    <input class='search-bar' type="text">
+                </li>
+                <li>
+
+
+                    <ul class='output'>
+                        <p class='sh'>Shopping List</p>
+                        <p class='empty'>Empty cart</p>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </header>
+
+    <section class="cartList">
+        <div class="wrapper">
+            <h1>Shopping List</h1>
+
+            <ul>
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Strawberry.png" alt="">
+                        </div>
+                        <h2>Strawberry</h2>
+                        <h4>Price: $1.2</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value="Add" class='add' data-name='Strawberry' data-price='1.2'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Blackberry.png" alt="">
+                        </div>
+                        <h2>Blackberry</h2>
+                        <h4>Price: $1.4</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value="Add" class='add' data-name='Blackberry' data-price='1.4'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Raspberry.png" alt="">
+                        </div>
+                        <h2>Raspberry</h2>
+                        <h4>Price: $0.8</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value='Add' class='add' data-name='Raspberry' data-price='0.8'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Cherry.png" alt="">
+                        </div>
+                        <h2>Cherry</h2>
+                        <h4>Price: $2.2</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value='Add' class='add' data-name='Cherry' data-price='2.2'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Blueberry.png" alt="">
+                        </div>
+                        <h2>Blueberry</h2>
+                        <h4>Price: $4.2</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value='Add' class='add' data-name='Blueberry' data-price='4.2'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Aronia.png" alt="">
+                        </div>
+                        <h2>Aronia</h2>
+                        <h4>Price: $0.8</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value='Add' class='add' data-name='Aronia' data-price='0.8'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Lingonberry.png" alt="">
+                        </div>
+                        <h2>Lingonberry</h2>
+                        <h4>Price: $2.2</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value='Add' class='add' data-name='Lingonberry' data-price='2.2'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Cranberry.png" alt="">
+                        </div>
+                        <h2>Cranberry</h2>
+                        <h4>Price: $4.2</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value='Add' class='add' data-name='Cranberry' data-price='4.2'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Orange.png" alt="">
+                        </div>
+                        <h2>Orange</h2>
+                        <h4>Price: $3.1</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value='Add' class='add' data-name='Orange' data-price='3.1'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Pineapple.png" alt="">
+                        </div>
+                        <h2>Pineapple</h2>
+                        <h4>Price: $6</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value='Add' class='add' data-name='Pineapple' data-price='6'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Apricot.png" alt="">
+                        </div>
+                        <h2>Apricot</h2>
+                        <h4>Price: $1.7</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value='Add' class='add' data-name='Apricot' data-price='1.7'>
+                        </div>
+                    </div>
+                </li>
+
+                <li class='cart'>
+                    <div class="cart-content">
+                        <div class="image">
+                            <img src="../assets/Avocado.png" alt="">
+                        </div>
+                        <h2>Avocado</h2>
+                        <h4>Price: $3.7</h4>
+                        <div class="counting">
+                            <input type="number" class='number' value='1' min='1'>
+                            <input type='button' value='Add' class='add' data-name='Avocado' data-price='3.7'>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="table ">
+                <div class="buyTable">
+                    <a href="#" class='exit-table'>X</a>
+                    <h1>Type your name:</h1>
+                    <div class="save-content">
+                        <span class='err'></span>
+                        <input type="text" class='customer'>
+                        <input type='button' value='Save' class='save'>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</template>
+
+
+<script>
+
+</script>
+
+
+<style scoped>
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.wrapper {
+    max-width: 1440px;
+    width: 95%;
+    margin: 0 auto;
+}
+
+header {
+    background: white;
+    background: -webkit-gradient(left top, right top, color-stop(0%, white), color-stop(0%, #e0700d), color-stop(100%, #cc1d3a));
+    background: -webkit-gradient(linear, left top, right top, from(white), color-stop(0%, #e0700d), to(#cc1d3a));
+    background: linear-gradient(to right, white 0%, #e0700d 0%, #cc1d3a 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#cc1d3a', GradientType=1);
+}
+
+header .header-content {
+    text-align: right;
+}
+
+header .header-content li {
+    display: inline-block;
+    margin: 0 1rem;
+    position: relative;
+    padding: 1rem 0.4rem;
+}
+
+header .header-content li i {
+    font-size: 25px;
+    color: white;
+    font-weight: 300;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+header .header-content li .circle {
+    position: absolute;
+    font-size: 12px;
+    z-index: 500;
+    top: 0;
+    right: -3px;
+    color: #dfa034;
+    display: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+header .header-content li .circle.open {
+    display: block;
+}
+
+header .header-content li .search-bar {
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 0;
+    -webkit-transition: all 500ms ease;
+    transition: all 500ms ease;
+    border-bottom: 1px solid #e0700d;
+    color: #f59c17;
+    font-weight: 400;
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+header .header-content li .search-bar.open {
+    width: 150px;
+    border-bottom: 1px solid #e0700d;
+}
+
+@media only screen and (max-width: 350px) {
+    header .header-content li .search-bar.open {
+        width: 125px;
+    }
+}
+
+header .header-content li .output {
+    position: absolute;
+    z-index: 100;
+    top: 100%;
+    right: 0%;
+    width: 250px;
+    background: white;
+    background: -webkit-gradient(left top, right top, color-stop(0%, white), color-stop(0%, white), color-stop(0%, #c73d0a), color-stop(100%, #cc1d3a));
+    background: -webkit-gradient(linear, left top, right top, from(white), color-stop(0%, white), color-stop(0%, #c73d0a), to(#cc1d3a));
+    background: linear-gradient(to right, white 0%, white 0%, #c73d0a 0%, #cc1d3a 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#cc1d3a', GradientType=1);
+    display: none;
+}
+
+header .header-content li .output.open {
+    display: block;
+}
+
+header .header-content li .output .sh {
+    text-align: left;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid white;
+}
+
+header .header-content li .output .empty {
+    padding: 2rem 0;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+}
+
+header .header-content li .output li {
+    display: block;
+    color: white;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: left;
+    position: relative;
+}
+
+header .header-content li .output li .nm {
+    font-size: 20px;
+    margin: 0 0 7px 0;
+}
+
+header .header-content li .output li .fruit-img {
+    width: 45px;
+    height: 45px;
+    float: right;
+    margin-top: 20px;
+}
+
+header .header-content li .output li .clearItem {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease;
+}
+
+header .header-content li .output li .clearItem:hover {
+    color: #f6c4c8;
+}
+
+header .header-content li .output .clearAll,
+header .header-content li .output .buyBtn {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    margin: 15px 6px 6px 6px;
+    font-weight: 500;
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease;
+}
+
+header .header-content li .output .clearAll:hover,
+header .header-content li .output .buyBtn:hover {
+    color: #f6c4c8;
+}
+
+header .header-content li .output .buyBtn {
+    float: left;
+}
+
+header .header-content li .output .total-price {
+    border-top: 1px solid white;
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    overflow: hidden;
+}
+
+header .header-content li .output .total-price span {
+    text-align: left;
+    float: left;
+}
+
+.cartList {
+    overflow: hidden;
+    padding: 2rem 0;
+}
+
+.cartList .table {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(208, 108, 81, 0.4);
+    opacity: 0;
+}
+
+.cartList .table.up {
+    -webkit-transition: opacity 1000ms ease 150ms, left 10ms ease;
+    transition: opacity 1000ms ease 150ms, left 10ms ease;
+}
+
+.cartList .table.back {
+    -webkit-transition: opacity 1000ms ease, left 10ms ease 1000ms;
+    transition: opacity 1000ms ease, left 10ms ease 1000ms;
+}
+
+.cartList .table.open {
+    z-index: 600;
+    left: 0;
+    opacity: 1;
+}
+
+.cartList .table .buyTable {
+    border-radius: 3px;
+    position: relative;
+    top: -50%;
+    margin: 0 auto;
+    z-index: 500;
+    max-width: 400px;
+    background: white;
+    -webkit-transition: all 1s ease;
+    transition: all 1s ease;
+    -webkit-transition-delay: 200ms;
+    transition-delay: 200ms;
+    padding: 1rem;
+    overflow: hidden;
+}
+
+.cartList .table .buyTable.open {
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.cartList .table .buyTable .save-content {
+    display: block;
+}
+
+.cartList .table .buyTable .save-content input {
+    width: 70%;
+    float: left;
+    padding: 10px 0 10px 10px;
+    margin: 20px 0 10px 0;
+    border: 1px solid #cbcbcb;
+    font-size: 17px;
+}
+
+.cartList .table .buyTable .save-content .err {
+    font-weight: 600;
+}
+
+.cartList .table .buyTable .save-content input[type='text'] {
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+    border-right: none;
+    outline: none;
+}
+
+.cartList .table .buyTable .save-content input[type='button'] {
+    background: white;
+    background: -webkit-gradient(left top, right top, color-stop(0%, white), color-stop(0%, #e0700d), color-stop(100%, #cc1d3a));
+    background: -webkit-gradient(linear, left top, right top, from(white), color-stop(0%, #e0700d), to(#cc1d3a));
+    background: linear-gradient(to right, white 0%, #e0700d 0%, #cc1d3a 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#cc1d3a', GradientType=1);
+    outline: none;
+    border: none;
+    width: 30%;
+    padding: 11px 0;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-transition: all 300ms ease;
+    transition: all 300ms ease;
+}
+
+.cartList .table .buyTable .save-content input[type='button']:hover {
+    background-position: -110px;
+}
+
+.cartList .table .buyTable .exit-table {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #cc1d3a;
+    font-size: 20px;
+    font-weight: 600;
+    text-decoration: none;
+    -webkit-transition: all .2s ease;
+    transition: all .2s ease;
+}
+
+.cartList .table .buyTable .exit-table:hover {
+    color: #f6c4c8;
+}
+
+.cartList .cart-content {
+    max-width: 250px;
+    margin: 0 auto;
+}
+
+.cartList .image {
+    text-align: center;
+}
+
+@media only screen and (max-width: 1100px) {
+    .cartList .image {
+        max-width: 100%;
+    }
+}
+
+.cartList h1 {
+    font-size: 35px;
+    margin: 20px 0 30px 0;
+    color: #cc1d3a;
+}
+
+.cartList ul {
+    list-style: none;
+}
+
+.cartList ul li {
+    float: left;
+    width: 24%;
+    padding: 0.5rem 0;
+    margin: 15px 0.5%;
+}
+
+@media only screen and (max-width: 1150px) {
+    .cartList ul li {
+        width: 50%;
+        margin: 0;
+        border-bottom: 1px solid #d7d7d7;
+        padding: 2rem 0;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .cartList ul li {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+.cartList ul li h4 {
+    margin: 5px 0;
+}
+
+.cartList ul li .counting input {
+    width: 60%;
+    float: left;
+    padding: 10px 0 10px 10px;
+    margin: 10px 0 0 0;
+    border: 1px solid #d7d7d7;
+    font-size: 17px;
+}
+
+.cartList ul li .counting input[type='number'] {
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+    border-right: none;
+}
+
+.cartList ul li .counting input[type='button'] {
+    background: white;
+    background: -webkit-gradient(left top, right top, color-stop(0%, white), color-stop(0%, #e0700d), color-stop(100%, #cc1d3a));
+    background: -webkit-gradient(linear, left top, right top, from(white), color-stop(0%, #e0700d), to(#cc1d3a));
+    background: linear-gradient(to right, white 0%, #e0700d 0%, #cc1d3a 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#cc1d3a', GradientType=1);
+    outline: none;
+    border: none;
+    width: 40%;
+    padding: 11px 0;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    -webkit-transition: all 300ms ease;
+    transition: all 300ms ease;
+}
+
+.cartList ul li .counting input[type='button']:hover {
+    background-position: -100px;
+}
+
+</style>
