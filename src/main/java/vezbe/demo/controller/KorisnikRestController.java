@@ -221,6 +221,56 @@ public class KorisnikRestController
         return registracija;
     }
 
+    @GetMapping("/api/admin/korisnik/name/{naziv}")
+    public ResponseEntity getKorisnikName(@PathVariable(name = "naziv") String name, HttpSession session) {
+
+        if(!sessionService.validateSession(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik korisnik = korisnikRepository.getByName(name);
+
+        if(korisnik == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ne postoji takav korisnik.");
+
+        return ResponseEntity.status(HttpStatus.OK).body(korisnik);
+    }
+
+    @GetMapping("/api/admin/korisnik/surname/{naziv}")
+    public ResponseEntity getKorisnikSurnameName(@PathVariable(name = "naziv") String surname, HttpSession session) {
+
+        if(!sessionService.validateSession(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik korisnik = korisnikRepository.getBySurname(surname);
+
+        if(korisnik == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ne postoji takav korisnik.");
+
+        return ResponseEntity.status(HttpStatus.OK).body(korisnik);
+    }
+
+    @GetMapping("/api/admin/korisnik/username/{naziv}")
+    public ResponseEntity getKorisnikUsername(@PathVariable(name = "naziv") String username, HttpSession session) {
+
+        if(!sessionService.validateSession(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Korisnik korisnik = korisnikRepository.getByUsername(username);
+
+        if(korisnik == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ne postoji takav korisnik.");
+
+        return ResponseEntity.status(HttpStatus.OK).body(korisnik);
+    }
 
 }
 
