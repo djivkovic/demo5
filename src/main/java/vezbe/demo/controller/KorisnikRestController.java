@@ -61,50 +61,31 @@ public class KorisnikRestController
         return ResponseEntity.status(HttpStatus.OK).body(session.getAttribute("korisnik"));
     }
 
-    @PostMapping("api/korisnik")
-    public ResponseEntity UpdateProfile(@RequestBody RegisterDto registerDto, HttpSession session){
-        String username = sessionService.getUsername(session);
-        if(username == null)
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
-        if (username.isEmpty())
-            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+    @PutMapping("/api/login/info/izmena")
+    public ResponseEntity<Korisnik> setKorisnik(HttpSession session, @RequestBody RegisterDto registerDto) {
 
-        Uloga role = sessionService.getRole(session);
-        registerDto.setUsername(username);
+        if (!sessionService.validateSession(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        HashMap<String, String> errorDic =  Validate(registerDto);
-        if (!errorDic.isEmpty())
-            return new ResponseEntity(errorDic, HttpStatus.BAD_REQUEST);
+        Korisnik k = (Korisnik) session.getAttribute("korisnik");
 
-        return new ResponseEntity(HttpStatus.OK);
+        k.setUsername(registerDto.getUsername() == null ? k.getName() : registerDto.getUsername());
+        k.setPassword(registerDto.getPassword() == null ? k.getPassword() : registerDto.getPassword());
+        k.setName(registerDto.getName() == null ? k.getName() : registerDto.getName());
+        k.setSurname(registerDto.getSurname() == null ? k.getSurname() : registerDto.getSurname());
+
+        korisnikRepository.save(k);
+
+        try {
+            System.out.println("Uspesna izmena.");
+        } catch (Exception e) {
+            System.out.println("Neuspesna izmena.");
+        }
+
+        return ResponseEntity.ok(k);
     }
 
 
-    private HashMap<String, String> Validate(RegisterDto registerDto){
-        HashMap<String, String> errorDic = new HashMap<>();
-
-        if (registerDto.getName() == null)
-            errorDic.put("name", "Name is mandatory");
-        else if(registerDto.getName().isEmpty())
-            errorDic.put("name", "Name is mandatory");
-
-        if (registerDto.getSurname() == null)
-            errorDic.put("surname", "Surname is mandatory");
-        else if(registerDto.getSurname().isEmpty())
-            errorDic.put("surname", "Surname is mandatory");
-
-        if (registerDto.getUsername() == null)
-            errorDic.put("username", "Username is mandatory");
-        else if(registerDto.getUsername().isEmpty())
-            errorDic.put("username", "Username is mandatory");
-
-        if (registerDto.getPassword() == null)
-            errorDic.put("password", "Password is mandatory");
-        else if(registerDto.getPassword().isEmpty())
-            errorDic.put("password", "Password is mandatory");
-
-        return errorDic;
-    }
 
 
     @GetMapping("/api/korisnici/ispis")

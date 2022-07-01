@@ -26,7 +26,7 @@ public class Lokacija implements Serializable
 
 
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Restoran restoran;
 
     public Lokacija(String geografska_duzina, String geografska_sirina, String adresa)

@@ -5,11 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import vezbe.demo.dto.RestoranDto;
+import vezbe.demo.dto.RestoranDto2;
 import vezbe.demo.entity.*;
-import vezbe.demo.repository.ArtikalRepository;
-import vezbe.demo.repository.LokacijaRepository;
-import vezbe.demo.repository.MenadzerRepository;
-import vezbe.demo.repository.RestoranRepository;
+import vezbe.demo.repository.*;
 import vezbe.demo.service.RestoranService;
 import vezbe.demo.service.SessionService;
 
@@ -36,7 +34,7 @@ public class RestoranController {
     private MenadzerRepository menadzerRepository;
 
     @Autowired
-    private ArtikalRepository artikalRepository;
+    private PorudzbinaRepository porudzbinaRepository;
 
 
     @GetMapping("/api/restorani/info/{id}")
@@ -87,14 +85,16 @@ public class RestoranController {
             RestoranDto informacijeoRestoranu = new RestoranDto();
             informacijeoRestoranu.setRestoran(restoran);
             informacijeoRestoranu.setArtikli(restoran.getArtikli());
+            informacijeoRestoranu.setKomentar(restoran.getKomentari());
             informacijeoRestoranima.add(informacijeoRestoranu);
+
         }
         return new ResponseEntity(informacijeoRestoranima, HttpStatus.OK);
     }
 
 
     @PostMapping("api/restorani/kreiraj-restoran")
-    public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto restoranDto, HttpSession session) {
+    public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto2 restoranDto, HttpSession session) {
         if (!sessionService.validateSession(session)) {
             return new ResponseEntity(HttpStatus.FORBIDDEN);
         }
@@ -104,8 +104,10 @@ public class RestoranController {
         String poruka;
         ResponseEntity<String> kreirajRestoran;
 
-        Restoran restoran = restoranDto.ToRestoran();
-
+        Restoran restoran = new Restoran();
+        restoran.setNaziv(restoranDto.getNaziv());
+        restoran.setTip(restoranDto.getTip());
+        restoran.setLokacija(restoranDto.getLokacija());
         List<Menadzer> menadzerList = menadzerRepository.findAll();
         Menadzer menadzer = new Menadzer();
 
@@ -121,8 +123,8 @@ public class RestoranController {
 
         }
         try {
+            lokacijaRepository.saveAndFlush(restoran.getLokacija());
             restoranRepository.saveAndFlush(restoran);
-            menadzerRepository.saveAndFlush(menadzer);
             poruka = "Restoran uspesno kreiran!";
             kreirajRestoran = ResponseEntity.ok(poruka);
         } catch (Exception e) {
@@ -133,5 +135,36 @@ public class RestoranController {
 
         return kreirajRestoran;
     }
+
+    @DeleteMapping("/api/admin/brisiRestoran/{nazivRestorana}")
+    public ResponseEntity obrisiRestoran(@PathVariable String nazivRestorana, HttpSession session) {
+
+        if(!sessionService.validateSession(session))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        Restoran restoran = restoranRepository.getByNaziv(nazivRestorana);
+
+        if(restoran == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Neuspesno pronalazenje restorana.");
+
+        List<Porudzbina> plist = porudzbinaRepository.findAll();
+
+        for(Porudzbina p : plist) {
+            if(p.getRestoran().equals(restoran))
+                p.setRestoran(null);
+        }
+
+
+        Menadzer menadzer = menadzerRepository.getByRestoran(restoran);
+        if(menadzer != null)
+            menadzer.setRestoran(null);
+
+        restoranRepository.deleteById(restoran.getID());
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Uspesno obrisan restoran!");
+    }
+
 
 }

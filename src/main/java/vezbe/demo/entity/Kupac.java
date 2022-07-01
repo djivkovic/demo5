@@ -29,6 +29,9 @@ public class Kupac extends  Korisnik implements Serializable
     @JoinColumn(name = "tip_kupca", referencedColumnName = "id")
     private TipKupca tip_kupca;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Komentar> komentari;
+
 
     public Kupac(String username, String password, String name, String surname) {
         super(username, password, name, surname);
@@ -72,6 +75,15 @@ public class Kupac extends  Korisnik implements Serializable
 
     public void setPorudzbine(Set<Porudzbina> porudzbine) {
         this.porudzbine = porudzbine;
+    }
+
+    @JsonIgnore
+    public Set<Komentar> getKomentari() {
+        return komentari;
+    }
+    @JsonIgnore
+    public void setKomentari(Set<Komentar> komentari) {
+        this.komentari = komentari;
     }
 }
 

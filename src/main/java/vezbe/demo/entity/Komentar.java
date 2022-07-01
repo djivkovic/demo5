@@ -19,16 +19,21 @@ public class Komentar implements Serializable {
     @JoinColumn(name = "restoran_id", referencedColumnName = "id")
     private Restoran restoran;
 
-    @Column(name = "komentar")
-    private String komentar;
+    @Column(name = "tekst")
+    private String tekst;
 
     @Column(name = "ocena")
     private Integer ocena;
 
-    public Komentar(Kupac kupac, Restoran restoran, String komentar, Integer ocena) {
+    public Komentar(Kupac kupac, Restoran restoran, String tekst, Integer ocena) {
         this.kupac = kupac;
         this.restoran = restoran;
-        this.komentar = komentar;
+        this.tekst = tekst;
+        this.ocena = ocena;
+    }
+
+    public Komentar(String tekst, Integer ocena) {
+        this.tekst = tekst;
         this.ocena = ocena;
     }
 
@@ -52,12 +57,12 @@ public class Komentar implements Serializable {
         this.restoran = restoran;
     }
 
-    public String getKomentar() {
-        return komentar;
+    public String getTekst() {
+        return tekst;
     }
 
-    public void setKomentar(String komentar) {
-        this.komentar = komentar;
+    public void setTekst(String tekst) {
+        this.tekst = tekst;
     }
 
     public Integer getOcena() {

@@ -34,6 +34,8 @@ public class Restoran implements Serializable
     @JoinColumn(name = "lokacija")
     private Lokacija lokacija;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Komentar> komentari;
     
 
 
@@ -62,12 +64,12 @@ public class Restoran implements Serializable
         this.naziv = naziv;
     }
 
-    public String getTip_restorana() {
+    public String getTip() {
         return tip;
     }
 
-    public void setTip_restorana(String tip_restorana) {
-        this.tip = tip_restorana;
+    public void setTip(String tip) {
+        this.tip = tip;
     }
 
 
@@ -95,6 +97,16 @@ public class Restoran implements Serializable
 
     public void setPorudzbine(Set<Porudzbina> porudzbine) {
         this.porudzbine = porudzbine;
+    }
+
+    @JsonIgnore
+    public Set<Komentar> getKomentari() {
+        return komentari;
+    }
+
+    @JsonIgnore
+    public void setKomentari(Set<Komentar> komentari) {
+        this.komentari = komentari;
     }
 }
 
