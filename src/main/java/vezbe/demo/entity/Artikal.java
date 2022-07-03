@@ -27,14 +27,14 @@ public class Artikal implements Serializable {
     private String naziv;
 
     @Column(name = "cena")
-    private Double cena;
+    private double cena;
 
     @Column(name = "tip")
     @Enumerated
     private Tip tip;
 
     @Column(name = "kolicina")
-    private Integer kolicina;
+    private double kolicina;
 
     @Column(name = "opis")
     private String opis;
@@ -61,13 +61,20 @@ public class Artikal implements Serializable {
     }
 
 
-    public Artikal(String naziv, Double cena, Tip tip, Integer kolicina, String opis) {
+    public Artikal(String naziv, Double cena, Tip tip, double kolicina, String opis) {
         this.naziv = naziv;
         this.cena = cena;
         this.tip = tip;
         this.kolicina = kolicina;
         this.orderDate = new Date();
         this.opis = opis;
+    }
+
+
+    public Artikal(String naziv, Double cena, Tip tip) {
+        this.naziv = naziv;
+        this.cena = cena;
+        this.tip = tip;
     }
 
     public Artikal() {
@@ -107,11 +114,11 @@ public class Artikal implements Serializable {
         this.tip = tip;
     }
 
-    public Integer getKolicina() {
+    public double getKolicina() {
         return kolicina;
     }
 
-    public void setKolicina(Integer kolicina) {
+    public void setKolicina(double kolicina) {
         this.kolicina = kolicina;
     }
 

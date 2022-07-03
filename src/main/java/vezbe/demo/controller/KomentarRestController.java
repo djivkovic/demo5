@@ -84,5 +84,4 @@ public class KomentarRestController {
         }
         return new ResponseEntity(HttpStatus.FORBIDDEN);
     }
-    }
-
+}

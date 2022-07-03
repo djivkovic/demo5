@@ -32,7 +32,6 @@ public class Kupac extends  Korisnik implements Serializable
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Komentar> komentari;
 
-
     public Kupac(String username, String password, String name, String surname) {
         super(username, password, name, surname);
         this.uloga = Uloga.KUPAC;
@@ -86,4 +85,5 @@ public class Kupac extends  Korisnik implements Serializable
         this.komentari = komentari;
     }
 }
+
 

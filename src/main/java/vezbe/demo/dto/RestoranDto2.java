@@ -4,12 +4,12 @@ import vezbe.demo.entity.Lokacija;
 
 public class RestoranDto2 {
     private String naziv;
-    private String tip;
+    private String tip_restorana;
     private Lokacija lokacija;
 
-    public RestoranDto2(String naziv, String tip, Lokacija lokacija) {
+    public RestoranDto2(String naziv, String tip_restorana, Lokacija lokacija) {
         this.naziv = naziv;
-        this.tip = tip;
+        this.tip_restorana = tip_restorana;
         this.lokacija = lokacija;
     }
 
@@ -22,11 +22,11 @@ public class RestoranDto2 {
     }
 
     public String getTip() {
-        return tip;
+        return tip_restorana;
     }
 
     public void setTip(String tip) {
-        this.tip = tip;
+        this.tip_restorana = tip_restorana;
     }
 
     public Lokacija getLokacija() {

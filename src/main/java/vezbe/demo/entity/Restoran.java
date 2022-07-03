@@ -36,7 +36,6 @@ public class Restoran implements Serializable
 
     @OneToMany(fetch = FetchType.EAGER)
     private Set<Komentar> komentari;
-    
 
 
     public Restoran(String naziv, String tip_restorana, Lokacija lokacija)
@@ -64,12 +63,12 @@ public class Restoran implements Serializable
         this.naziv = naziv;
     }
 
-    public String getTip() {
+    public String getTip_restorana() {
         return tip;
     }
 
-    public void setTip(String tip) {
-        this.tip = tip;
+    public void setTip_restorana(String tip_restorana) {
+        this.tip = tip_restorana;
     }
 
 
@@ -108,6 +107,8 @@ public class Restoran implements Serializable
     public void setKomentari(Set<Komentar> komentari) {
         this.komentari = komentari;
     }
+
 }
+
 
 

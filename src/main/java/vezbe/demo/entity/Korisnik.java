@@ -43,6 +43,15 @@ public  class Korisnik implements Serializable
     @Enumerated(EnumType.STRING)
     protected Uloga uloga;
 
+    private boolean auth;
+
+    public boolean isAuth() {
+        return auth;
+    }
+
+    public void setAuth(boolean auth) {
+        this.auth = auth;
+    }
 
     public String getUsername()
     {
@@ -130,6 +139,8 @@ public  class Korisnik implements Serializable
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.auth = false;
+
     }
 
     public Korisnik(String username, String password, String name, String surname, Pol pol, Date datumRodjenja, Uloga uloga) {
@@ -140,6 +151,7 @@ public  class Korisnik implements Serializable
         this.pol = pol;
         this.datum_rodjenja = datumRodjenja;
         this.uloga = uloga;
+        this.auth = false;
     }
 
     public  Korisnik(){};

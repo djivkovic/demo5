@@ -11,7 +11,7 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long>
 {
     Korisnik getByUsername(String username);
     Optional<Korisnik> findByUsername(@Param("username") String username);
-    Korisnik getById(@Param("id") Long id);
     Korisnik getByName(String name);
     Korisnik getBySurname(String surname);
+
 }

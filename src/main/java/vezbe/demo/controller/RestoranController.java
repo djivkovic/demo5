@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @RestController
 public class RestoranController {
 
@@ -34,7 +36,14 @@ public class RestoranController {
     private MenadzerRepository menadzerRepository;
 
     @Autowired
+    private ArtikalRepository artikalRepository;
+
+    @Autowired
+    private KorisnikRepository korisnikRepository;
+
+    @Autowired
     private PorudzbinaRepository porudzbinaRepository;
+
 
 
     @GetMapping("/api/restorani/info/{id}")
@@ -76,38 +85,38 @@ public class RestoranController {
     }
 
 
-    @GetMapping("api/restorani/prikaz")
-    public ResponseEntity Prikaz(HttpSession session) {
-        List<RestoranDto> informacijeoRestoranima = new ArrayList<>();
+    @GetMapping("api/restorani/ispis")
+    public  List<Restoran> Prikaz(HttpSession session) {
         List<Restoran> restorani = restoranRepository.findAll();
 
-        for (Restoran restoran : restorani) {
-            RestoranDto informacijeoRestoranu = new RestoranDto();
-            informacijeoRestoranu.setRestoran(restoran);
-            informacijeoRestoranu.setArtikli(restoran.getArtikli());
-            informacijeoRestoranu.setKomentar(restoran.getKomentari());
-            informacijeoRestoranima.add(informacijeoRestoranu);
+        return restorani;
 
-        }
-        return new ResponseEntity(informacijeoRestoranima, HttpStatus.OK);
     }
 
 
     @PostMapping("api/restorani/kreiraj-restoran")
-    public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto2 restoranDto, HttpSession session) {
-        if (!sessionService.validateSession(session)) {
+    public ResponseEntity<?> kreirajRestoran(@RequestBody RestoranDto2 restoranDto, @RequestParam String username) {
+        Korisnik loggedKorisnik = korisnikRepository.getByUsername(username);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity("Nema korisnika!", HttpStatus.NOT_FOUND);
+
+        if(loggedKorisnik.isAuth() == false)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
-        if (!sessionService.getRole(session).equals(Uloga.ADMIN))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
 
         String poruka;
         ResponseEntity<String> kreirajRestoran;
 
         Restoran restoran = new Restoran();
         restoran.setNaziv(restoranDto.getNaziv());
-        restoran.setTip(restoranDto.getTip());
+        restoran.setTip_restorana(restoranDto.getTip());
         restoran.setLokacija(restoranDto.getLokacija());
+
+
         List<Menadzer> menadzerList = menadzerRepository.findAll();
         Menadzer menadzer = new Menadzer();
 
@@ -125,6 +134,8 @@ public class RestoranController {
         try {
             lokacijaRepository.saveAndFlush(restoran.getLokacija());
             restoranRepository.saveAndFlush(restoran);
+            menadzerRepository.saveAndFlush(menadzer);
+
             poruka = "Restoran uspesno kreiran!";
             kreirajRestoran = ResponseEntity.ok(poruka);
         } catch (Exception e) {
@@ -136,15 +147,21 @@ public class RestoranController {
         return kreirajRestoran;
     }
 
-    @DeleteMapping("/api/admin/brisiRestoran/{nazivRestorana}")
-    public ResponseEntity obrisiRestoran(@PathVariable String nazivRestorana, HttpSession session) {
+    @DeleteMapping("/api/admin/brisiRestoran/{naziv}")
+    public ResponseEntity obrisiRestoran(@PathVariable String naziv, @RequestParam String username) {
 
-        if(!sessionService.validateSession(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+        Korisnik loggedKorisnik = korisnikRepository.getByUsername(username);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity("Nema korisnika!", HttpStatus.NOT_FOUND);
+
+        if(loggedKorisnik.isAuth() == false)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        Restoran restoran = restoranRepository.getByNaziv(nazivRestorana);
+        Restoran restoran = restoranRepository.getByNaziv(naziv);
 
         if(restoran == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Neuspesno pronalazenje restorana.");
@@ -165,6 +182,8 @@ public class RestoranController {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Uspesno obrisan restoran!");
     }
+
+
 
 
 }

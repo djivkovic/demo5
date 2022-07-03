@@ -26,6 +26,11 @@ public class KorisnikDto
     }
 
 
+    public KorisnikDto()
+    {
+    }
+
+
     public Long getId()
     {
         return id;
@@ -51,7 +56,7 @@ public class KorisnikDto
         return surname;
     }
 
-    public void getSurname(String surname)
+    public void setSurname(String surname)
     {
         this.surname = surname;
     }

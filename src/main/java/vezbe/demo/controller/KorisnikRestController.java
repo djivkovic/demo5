@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import vezbe.demo.dto.ArtikalDto;
 import vezbe.demo.dto.RegisterDto;
 import vezbe.demo.entity.*;
 import vezbe.demo.repository.*;
@@ -14,15 +13,12 @@ import vezbe.demo.service.MenadzerService;
 import vezbe.demo.service.SessionService;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-public class KorisnikRestController
-{
+public class KorisnikRestController {
     @Autowired
     private KorisnikService korisnikService;
 
@@ -47,72 +43,124 @@ public class KorisnikRestController
     @Autowired
     private ArtikalRepository artikalRepository;
 
-    @GetMapping("/api/login/info")
-    public ResponseEntity getInfo(HttpSession session){
-
-
-        if(!sessionService.validateSession(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-
-        if(!sessionService.getRole(session).equals(Uloga.KUPAC))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-
-
-        return ResponseEntity.status(HttpStatus.OK).body(session.getAttribute("korisnik"));
-    }
-
-    @PutMapping("/api/login/info/izmena")
-    public ResponseEntity<Korisnik> setKorisnik(HttpSession session, @RequestBody RegisterDto registerDto) {
-
-        if (!sessionService.validateSession(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-
-        Korisnik k = (Korisnik) session.getAttribute("korisnik");
-
-        k.setUsername(registerDto.getUsername() == null ? k.getName() : registerDto.getUsername());
-        k.setPassword(registerDto.getPassword() == null ? k.getPassword() : registerDto.getPassword());
-        k.setName(registerDto.getName() == null ? k.getName() : registerDto.getName());
-        k.setSurname(registerDto.getSurname() == null ? k.getSurname() : registerDto.getSurname());
-
-        korisnikRepository.save(k);
-
-        try {
-            System.out.println("Uspesna izmena.");
-        } catch (Exception e) {
-            System.out.println("Neuspesna izmena.");
-        }
-
-        return ResponseEntity.ok(k);
+    @GetMapping("/api/korisnici/korisnik/{id}")
+    public Optional<Korisnik> ispisiKorisnika(@PathVariable(name = "id") Long id) {
+        return korisnikRepository.findById(id);
     }
 
 
+
+    @PostMapping("api/korisnik")
+    public ResponseEntity UpdateProfile(@RequestBody RegisterDto registerDto, HttpSession session){
+        String username = sessionService.getUsername(session);
+        if(username == null)
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+        if (username.isEmpty())
+            return new ResponseEntity("Forbidden", HttpStatus.FORBIDDEN);
+
+        Uloga role = sessionService.getRole(session);
+        registerDto.setUsername(username);
+
+        HashMap<String, String> errorDic =  Validate(registerDto);
+        if (!errorDic.isEmpty())
+            return new ResponseEntity(errorDic, HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
+    private HashMap<String, String> Validate(RegisterDto registerDto){
+        HashMap<String, String> errorDic = new HashMap<>();
+
+        if (registerDto.getName() == null)
+            errorDic.put("name", "Name is mandatory");
+        else if(registerDto.getName().isEmpty())
+            errorDic.put("name", "Name is mandatory");
+
+        if (registerDto.getSurname() == null)
+            errorDic.put("surname", "Surname is mandatory");
+        else if(registerDto.getSurname().isEmpty())
+            errorDic.put("surname", "Surname is mandatory");
+
+        if (registerDto.getUsername() == null)
+            errorDic.put("username", "Username is mandatory");
+        else if(registerDto.getUsername().isEmpty())
+            errorDic.put("username", "Username is mandatory");
+
+        if (registerDto.getPassword() == null)
+            errorDic.put("password", "Password is mandatory");
+        else if(registerDto.getPassword().isEmpty())
+            errorDic.put("password", "Password is mandatory");
+
+        return errorDic;
+    }
+
+   /* @GetMapping("/api/korisnici/korisnik/{id}")
+    public Korisnik ispisiKorisnika(@PathVariable(name = "id") Long id) {
+        List<Korisnik> korisnikList = korisnikRepository.findAll();
+
+        for (Korisnik k : korisnikList)
+            if (Objects.equals(id, k.getID()))
+                return k;
+
+        return null;
+    }
+    */
 
 
     @GetMapping("/api/korisnici/ispis")
-    public ResponseEntity getKorisnici(HttpSession session) {
-        if(!sessionService.validateSession(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+    public ResponseEntity getKorisnici(HttpSession session, @RequestParam String username) {
 
-        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+//        if(!sessionService.validateSession(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        Korisnik loggedKorisnik = korisnikRepository.getByUsername(username);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity("Nema korisnika!", HttpStatus.NOT_FOUND);
+
+        if(loggedKorisnik.isAuth() == false)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         List<Korisnik> korisnikList = korisnikRepository.findAll();
-        List<RegisterDto> registrationRequestList = new ArrayList<>();
-
-        for (Korisnik korisnik : korisnikList) {
-            if (korisnik.getUloga() == null || !korisnik.getUloga().equals(Uloga.ADMIN)){
-                RegisterDto r = new RegisterDto();
-                r.setUsername(korisnik.getUsername());
-                r.setPassword(korisnik.getPassword());
-                r.setName(korisnik.getName());
-                r.setSurname(korisnik.getSurname());
 
 
-                registrationRequestList.add(r);
-            }
-        }
 
-        return ok(registrationRequestList);
+        return ok(korisnikList);
+    }
+
+
+    @GetMapping("/api/dostavljaci/ispis")
+    public ResponseEntity getDostavljaci() {
+
+//        if(!sessionService.validateSession(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        List<Dostavljac> dostavljacList = dostavljacRepository.findAll();
+
+        return ok(dostavljacList);
+    }
+
+    @GetMapping("/api/menadzeri/ispis")
+    public ResponseEntity getMenadzere() {
+
+//        if(!sessionService.validateSession(session))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+//
+//        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+//            return new ResponseEntity(HttpStatus.FORBIDDEN);
+
+        List<Menadzer> menadzerList = menadzerRepository.findAll();
+
+        return ok(menadzerList);
     }
 
     @GetMapping("/api/menadzer/restoran")
@@ -150,12 +198,18 @@ public class KorisnikRestController
     }
 
     @PostMapping("/api/kreiraj-menadzera")
-    public ResponseEntity kreirajMenadzera(@RequestBody RegisterDto registerDto, HttpSession session) {
-        if(!sessionService.validateSession(session))
+    public ResponseEntity kreirajMenadzera(@RequestBody RegisterDto registerDto, @RequestParam String username) {
+        Korisnik loggedKorisnik = korisnikRepository.getByUsername(username);
+
+        if(loggedKorisnik == null)
+            return new ResponseEntity("Nema korisnika!", HttpStatus.NOT_FOUND);
+
+        if(loggedKorisnik.isAuth() == false)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
-        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;
         ResponseEntity<String> registracija;
@@ -174,10 +228,10 @@ public class KorisnikRestController
 
         try {
             menadzerRepository.save(m);
-            poruka = "Uspesna registracija!";
+            poruka = "Uspesno kreiranje menadzera!";
             registracija = ResponseEntity.ok(poruka);
         } catch (Exception e) {
-            poruka = "Neuspesna registracija, pokusajte ponovo...";
+            poruka = "Neuspesna, pokusajte ponovo...";
             System.out.println(e.getMessage());
             registracija = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(poruka);
         }
@@ -186,11 +240,16 @@ public class KorisnikRestController
     }
 
     @PostMapping("/api/kreiraj-dostavljaca")
-    public ResponseEntity kreirajDostavljaca(@RequestBody RegisterDto registerDto, HttpSession session) {
-        if(!sessionService.validateSession(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+    public ResponseEntity kreirajDostavljaca( @RequestBody RegisterDto registerDto,@RequestParam String username) {
+        Korisnik loggedKorisnik = korisnikRepository.getByUsername(username);
 
-        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+        if(loggedKorisnik == null)
+            return new ResponseEntity("Nema korisnika!", HttpStatus.NOT_FOUND);
+
+        if(loggedKorisnik.isAuth() == false)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         String poruka;
@@ -210,10 +269,10 @@ public class KorisnikRestController
 
         try {
             dostavljacRepository.save(d);
-            poruka = "Uspesna registracija!";
+            poruka = "Uspesno kreiranje dostavljaca!";
             registracija = ResponseEntity.ok(poruka);
         } catch (Exception e) {
-            poruka = "Neuspesna registracija, pokusajte ponovo...";
+            poruka = "Neuspesna, pokusajte ponovo...";
             System.out.println(e.getMessage());
             registracija = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(poruka);
         }
@@ -221,13 +280,30 @@ public class KorisnikRestController
         return registracija;
     }
 
+
+    @DeleteMapping(
+            value = "/{id}"
+    )
+    public ResponseEntity deleteKorisnik(@PathVariable(name = "id") long id){
+        korisnikService.deleteById(id);
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+
+
     @GetMapping("/api/admin/korisnik/name/{naziv}")
-    public ResponseEntity getKorisnikName(@PathVariable(name = "naziv") String name, HttpSession session) {
+    public ResponseEntity getKorisnikName(@PathVariable(name = "naziv") String name, @RequestParam String username) {
 
-        if(!sessionService.validateSession(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        Korisnik loggedKorisnik = korisnikRepository.getByUsername(username);
 
-        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+        if(loggedKorisnik == null)
+            return new ResponseEntity("Nema korisnika!", HttpStatus.NOT_FOUND);
+
+        if(loggedKorisnik.isAuth() == false)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Korisnik korisnik = korisnikRepository.getByName(name);
@@ -239,12 +315,17 @@ public class KorisnikRestController
     }
 
     @GetMapping("/api/admin/korisnik/surname/{naziv}")
-    public ResponseEntity getKorisnikSurnameName(@PathVariable(name = "naziv") String surname, HttpSession session) {
+    public ResponseEntity getKorisnikSurnameName(@PathVariable(name = "naziv") String surname, @RequestParam String username) {
 
-        if(!sessionService.validateSession(session))
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        Korisnik loggedKorisnik = korisnikRepository.getByUsername(username);
 
-        if(!sessionService.getRole(session).equals(Uloga.ADMIN))
+        if(loggedKorisnik == null)
+            return new ResponseEntity("Nema korisnika!", HttpStatus.NOT_FOUND);
+
+        if(loggedKorisnik.isAuth() == false)
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+
+        if (!loggedKorisnik.getUloga().equals(Uloga.ADMIN))
             return new ResponseEntity(HttpStatus.FORBIDDEN);
 
         Korisnik korisnik = korisnikRepository.getBySurname(surname);
@@ -271,6 +352,13 @@ public class KorisnikRestController
 
         return ResponseEntity.status(HttpStatus.OK).body(korisnik);
     }
+
+
+
+
+
+
+
 
 }
 
