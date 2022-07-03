@@ -1,6 +1,6 @@
 <template>
 
-     <h2>Pritisnite na dugme kako bi se odjavili</h2>
+    <h2>Pritisnite na dugme kako bi se odjavili</h2>
     <button v-on:click="submit()" class="button button_secondary">Logout</button>
 
 
@@ -9,7 +9,7 @@
 <script>
 import axios from "axios"
 export default {
-    name: "LogoutView",
+    name: "LogoutComp",
     data: function () {
         return {
             korisnik: {
@@ -24,7 +24,7 @@ export default {
                 .post(`http://localhost:8083/api/logout?username=${this.$store.getters.korisnik.username}`, this.korisnik)
                 .then((res) => {
                     console.log(res);
-                    this.$router.push("/korisnik");
+                    this.$router.push("/login-korisnik");
                 })
                 .catch((err) => {
                     console.log(err);
@@ -56,8 +56,6 @@ export default {
 
 
 <style scoped>
-
-
 .button {
     border: none;
     outline: none;
@@ -83,6 +81,4 @@ export default {
 .button_secondary:hover {
     background: #4d4d4d;
 }
-
-
 </style>

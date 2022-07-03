@@ -6,6 +6,11 @@
     <input v-model="artikal.tip" /><br />
     <label for="tip">Cena:</label>
     <input v-model.number="artikal.cena" /><br />
+    <label for="kolicina">Kolicina:</label>
+    <input v-model.number="artikal.kolicina" /><br />
+    <label for="opis">Opis:</label>
+    <input v-model="artikal.opis" /><br />
+
 
     <button class="button" v-on:click="redirectToArtikli()">Kreiraj!</button>
 </template>
@@ -19,7 +24,8 @@ export default {
             artikal: {
                 naziv: "",
                 cena: "",
-                tip: ""
+                tip: "",
+               
             }
         };
     },

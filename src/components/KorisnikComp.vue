@@ -46,7 +46,7 @@ export default {
     },
     mounted: function () {
         axios
-            .get("http://localhost:8083/api/korisnici/ispis")
+            .get(`http://localhost:8083/api/korisnici/ispis?username=${this.$store.getters.korisnik.username}`)
             .then((res) => {
                 this.korisnici = res.data
             })
@@ -75,28 +75,16 @@ export default {
 
 
 <style scoped>
-
-
-
-
-
-
-
-section
-{
+section {
     background-color: antiquewhite;
 }
 
-a 
-{
+a {
     text-decoration: none;
     text-align: center;
 }
 
-.container
-{
+.container {
     border: 1px solid grey;
 }
-
-
 </style>
